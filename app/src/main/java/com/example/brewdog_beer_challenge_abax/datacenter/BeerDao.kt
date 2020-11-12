@@ -3,6 +3,8 @@ package com.example.brewdog_beer_challenge_abax.datacenter
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+// This is the BeerDao interface. It only contains the the SQL order, represented as functions.
+
 @Dao
 interface BeerDao {
 

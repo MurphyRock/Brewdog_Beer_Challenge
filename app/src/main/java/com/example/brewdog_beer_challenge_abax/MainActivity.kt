@@ -46,22 +46,28 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onStart() {
-        super.onStart()
+//    override fun onStart() {
+//        super.onStart()
+//        GlobalScope.async(Dispatchers.IO) {
+//            beerViewModel.insert(BeerClass(
+//                0,
+//                "testURL",
+//                "name",
+//                2.5,
+//                "Description wow",
+//                arrayListOf("a", "b", "c"),
+//                arrayListOf("a", "b", "c"),
+//                arrayListOf("a", "b", "c")
+//                )
+//            )
+//
+//        }
+//    }
+    override fun onStop() {
+        super.onStop()
         GlobalScope.async(Dispatchers.IO) {
-            beerViewModel.insert(BeerClass(
-                0,
-                "testURL",
-                "name",
-                2.5,
-                "Description wow",
-                arrayListOf("a", "b", "c"),
-                arrayListOf("a", "b", "c"),
-                arrayListOf("a", "b", "c")
-                )
-            )
+            beerViewModel.deleteAll()
 
         }
     }
-
 }

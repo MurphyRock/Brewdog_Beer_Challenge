@@ -2,11 +2,8 @@ package com.example.brewdog_beer_challenge_abax.datacenter
 
 import androidx.room.*
 import com.example.brewdog_beer_challenge_abax.tools.Converters
-import com.google.gson.Gson
 
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
-
+// This is the Beer class to be use when managing the data once it is pulled from the API
 
 @Entity(tableName = "beer_table")
 class BeerClass(

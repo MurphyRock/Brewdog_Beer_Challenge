@@ -14,6 +14,9 @@ class BeerRepository(application: Application) {
         allBeers = beerDao!!.observeAll()
     }
 
+    // Suspend methods so they have to be called by using coroutines
+    // It's optional, depending on the requirements, but you can also implement the background process here
+
     suspend fun insertBeer(beerObject: BeerClass) {
         beerDao?.insertBeer(beerObject)
     }
