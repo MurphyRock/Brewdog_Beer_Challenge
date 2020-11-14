@@ -1,22 +1,36 @@
 package com.example.brewdog_beer_challenge_abax.datacenter
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.beust.klaxon.JsonArray
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Klaxon
 import com.example.brewdog_beer_challenge_abax.networking.BeerAPI
+import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods
+//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getFermentation
+//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getHops
+//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getMalt
+//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getMashTemp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.StringReader
 import java.lang.Exception
+import kotlin.math.log
 
 class BeerViewModel(application: Application): AndroidViewModel(application) {
     private val repository: BeerRepository = BeerRepository(application)
-    val allBeersAPI = MutableLiveData<String>()
     val allBeers: LiveData<List<MediatorClass>> = repository.observeAll()!!
+
+    private val _allBeersAPI = MutableLiveData<String>()
+    private val allBeersAPI: LiveData<String>
+        get() = _allBeersAPI
 
     init {
         getRetrofitBeers()
@@ -24,29 +38,82 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
 
     private fun getRetrofitBeers(){
         viewModelScope.launch {
-//            try {
-                val beersList = BeerAPI.retrofitService.getBeers().enqueue(
-                    object: Callback<String> {
-                        override fun onFailure(call: Call<String>, t: Throwable) {
-                            allBeersAPI.value = "Failure retrieving Beers + ${t.message}"
-                        }
+            var beersJsonString: String = ""
+            try {
+                beersJsonString = BeerAPI.retrofitService.getBeers()
+                Log.v("API request succeed", "Saving data into the DB")
+            }catch (e: Exception){
+                Log.v("API request failed", e.toString())
+                Log.v("API request failed", "Using internal data")
+            }
+            if (beersJsonString != "") {
+                try {
+                    val json = Klaxon().parseJsonArray(StringReader(beersJsonString))
+                    repository.deleteAll()
+                    jsonToDB(json)
+                }catch (e: Exception){
+                    Log.v("Saving data failed", e.toString())
+                }
+            }
+//            val beersList = BeerAPI.retrofitService.getBeers().enqueue(
+//                object : Callback<String> {
+//                    override fun onFailure(call: Call<String>, t: Throwable) {
+//                        allBeersAPI.value = "Failure retrieving Beers + ${t.message}"
+//                        // We use DB data
+//                    }
+//
+//                    override fun onResponse(call: Call<String>, response: Response<String>) {
+//                        allBeersAPI.value = "Success retrieving Beers: ${response.body()}"
+//                        if (response.body() != null && response.body() != "") {
+//                            val json = Klaxon().parseJsonArray(StringReader(response.body()!!))
+//                            Log.v("Kanto", json.toString())
+//
+//                            jsonToDB(json)
+//                        }
+//
+//                        // We replace all the DB data with the new one
+//                    }
+//
+//                })
+        }
+    }
 
-                        override fun onResponse(call: Call<String>, response: Response<String>) {
-                            allBeersAPI.value = "Success retrieving Beers: ${response.body()}"
-                        }
+    private suspend fun jsonToDB(json: JsonArray<*>){
+        var jsonBeerObject: JsonObject
+        for (x in 0 until json.size){
+            jsonBeerObject = json[x] as JsonObject
 
-                    })
-//                allBeersAPI.value = "Success retrieving Beers: $beersList"
-//            }catch (e: Exception){
-//                allBeersAPI.value = "Failure retrieving Beers: ${e.message}"
-//            }
+            val beerName = jsonBeerObject["name"] as String
+            val beerImage = jsonBeerObject["image_url"] as String
+            val beerAbv = jsonBeerObject["abv"] as Number
+            val beerDescription = jsonBeerObject["description"] as String
+            val beerMethodJsonObject = jsonBeerObject["method"] as JsonObject
+
+            val beerObject = BeerClass(0,
+                beerImage,
+                beerName,
+                beerAbv.toDouble(),
+                beerDescription,
+                MethodClass(
+                    JsonDecoderMethods.getMashTemp(beerMethodJsonObject["mash_temp"] as JsonArray<*>),
+                    JsonDecoderMethods.getFermentation(beerMethodJsonObject),
+                    beerMethodJsonObject["twist"] as String?
+                )
+            )
+
+            val beerMaltJsonList = (jsonBeerObject["ingredients"] as JsonObject)["malt"] as JsonArray<*>
+            val beerHopsJsonList = (jsonBeerObject["ingredients"] as JsonObject)["hops"] as JsonArray<*>
+            val beerMaltList: List<MaltClass> = JsonDecoderMethods.getMalt(beerMaltJsonList)
+            val beerHopsList: List<HopsClass> = JsonDecoderMethods.getHops(beerHopsJsonList)
+
+            repository.insertBeer(beerObject, beerHopsList, beerMaltList)
         }
     }
 
     fun insert(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertBeer(beerObject)
     }
-    fun insert(beerObject: BeerClass, hopsList: List<HopsClass>, maltsList: List<MaltClass>) = viewModelScope.launch(Dispatchers.IO) {
+    suspend fun insert(beerObject: BeerClass, hopsList: List<HopsClass>, maltsList: List<MaltClass>) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertBeer(beerObject, hopsList, maltsList)
     }
 

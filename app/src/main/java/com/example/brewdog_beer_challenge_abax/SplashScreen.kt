@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ProgressBar
+import androidx.lifecycle.ViewModelProvider
+import com.example.brewdog_beer_challenge_abax.datacenter.BeerViewModel
 
 class SplashScreen : AppCompatActivity() {
 
@@ -17,6 +19,8 @@ class SplashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+
+        var beerViewModel: BeerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
         progressBar = findViewById(R.id.progress_bar)
 

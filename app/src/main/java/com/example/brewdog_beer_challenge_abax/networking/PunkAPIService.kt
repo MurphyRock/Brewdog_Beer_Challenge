@@ -13,7 +13,7 @@ private val retrofit = Retrofit.Builder().addConverterFactory(ScalarsConverterFa
 
 interface PunkAPIService {
     @GET("beers?page=1")
-    fun getBeers(): Call<String>
+    suspend fun getBeers(): String
 }
 
 object BeerAPI {

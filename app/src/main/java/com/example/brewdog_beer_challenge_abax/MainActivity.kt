@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,20 +26,20 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.testButton).setOnClickListener {
             Snackbar.make(it, "Added test example", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-            beerViewModel.insert(BeerClass(
-                0,
-                "testURL",
-                "name",
-                2.5,
-                "Description wow",
-                MethodClass(listOf("60 Celsius-10", "65 Celsius-30", "72 Celsius-10"), "21 Celsius", "Yuzu fruit")),
-                arrayListOf(
-                    HopsClass(0, 0,"hops1", "10 Grams", "yes", "black"),
-                    HopsClass(0, 0,"hops2", "23 Grams", "no", "blond")),
-                arrayListOf(
-                    MaltClass(0, 0,"malts1", "5 Kilograms"),
-                    MaltClass(0, 0,"malts2", "7 Kilograms"))
-            )
+//            beerViewModel.insert(BeerClass(
+//                0,
+//                "testURL",
+//                "name",
+//                2.5,
+//                "Description wow",
+//                MethodClass(listOf("60 Celsius-10", "65 Celsius-30", "72 Celsius-10"), "21 Celsius", "Yuzu fruit")),
+//                arrayListOf(
+//                    HopsClass(0, 0,"hops1", "10 Grams", "yes", "black"),
+//                    HopsClass(0, 0,"hops2", "23 Grams", "no", "blond")),
+//                arrayListOf(
+//                    MaltClass(0, 0,"malts1", "5 Kilograms"),
+//                    MaltClass(0, 0,"malts2", "7 Kilograms"))
+//            )
         }
 
         beerViewModel.allBeers.observe(this, Observer { data ->
@@ -65,11 +66,11 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 //    }
-    override fun onStop() {
-        super.onStop()
-        GlobalScope.async(Dispatchers.IO) {
-            beerViewModel.deleteAll()
-
-        }
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        GlobalScope.launch(Dispatchers.IO) {
+//            beerViewModel.deleteAll()
+//
+//        }
+//    }
 }

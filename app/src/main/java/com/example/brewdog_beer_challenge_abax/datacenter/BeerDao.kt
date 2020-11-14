@@ -9,17 +9,17 @@ import androidx.room.*
 interface BeerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBeer(beerObject: BeerClass?): Long
+    suspend fun insertBeer(beerObject: BeerClass?): Long
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertHop(hopObject: HopsClass?): Long
+    suspend fun insertHop(hopObject: HopsClass?): Long
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMalt(maltObject: MaltClass?): Long
+    suspend fun insertMalt(maltObject: MaltClass?): Long
 
     @Update
     suspend fun updateBeer(beerObject: BeerClass?)
 
     @Query("DELETE FROM BeerClass")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Delete
     fun deleteBeer(beerObject: BeerClass)
@@ -29,7 +29,7 @@ interface BeerDao {
     fun observeAll(): LiveData<List<MediatorClass>>
 
     @Transaction
-    fun insertBeer(beer: BeerClass?, hopsList: List<HopsClass>, maltsList: List<MaltClass>) {
+    suspend fun insertBeer(beer: BeerClass?, hopsList: List<HopsClass>, maltsList: List<MaltClass>) {
         // Save rowId of inserted CompanyEntity as companyId
         val beerId: Long = insertBeer(beer)
 

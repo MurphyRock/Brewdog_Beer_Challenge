@@ -34,7 +34,15 @@ data class MethodClass(
 //    @PrimaryKey(autoGenerate = true) var idMethod: Long,
     @TypeConverters(Converters::class) var mashTemp: List<String>,  // ("60 Celsius-10", "65 Celsius-30", "72 Celsius-10")
     var fermentation: String,  //  "21 Celsius"
-    var twist: String
+    var twist: String?
+)
+
+@Entity
+data class MaltClass(
+    @PrimaryKey(autoGenerate = true) var idMalt: Long,
+    var idMaltBeer: Long,
+    var nameMalt: String,
+    var amount: String  // "1.63 Kilograms"
 )
 
 @Entity
@@ -45,12 +53,4 @@ data class HopsClass(
     var amount: String,  // "10 Grams"
     var add: String,
     var attribute: String
-)
-
-@Entity
-data class MaltClass(
-    @PrimaryKey(autoGenerate = true) var idMalt: Long,
-    var idMaltBeer: Long,
-    var nameMalt: String,
-    var amount: String  // "1.63 Kilograms"
 )
