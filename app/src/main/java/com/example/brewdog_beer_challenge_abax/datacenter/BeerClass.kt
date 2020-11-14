@@ -19,33 +19,38 @@ data class MediatorClass(
 )
 
 @Entity
-data class HopsClass(
-    @PrimaryKey(autoGenerate = true) var idHops: Long,
-    var idHopsBeer: Long,
-    var nameHops: String,
-    var amount: Int,
-    var add: String,
-    var attribute: String
-)
-@Entity
-data class MaltClass(
-    @PrimaryKey(autoGenerate = true) var idMalt: Long,
-    var idMaltBeer: Long,
-    var nameMalt: String,
-    var amount: Int
-)
-@Entity
 data class BeerClass(
     @PrimaryKey(autoGenerate = true) var idBeer: Long,
     var imageURL: String,
     var name: String,
     var abv: Double,
-    var description: String
+    var description: String,
+    @Embedded var methods: MethodClass
 
-) {
+)
 
-    override fun toString(): String {
-        return "BeerClass(id=$idBeer, imageURL='$imageURL', name='$name', abv=$abv, description='$description'"
-    }
+@Entity
+data class MethodClass(
+//    @PrimaryKey(autoGenerate = true) var idMethod: Long,
+    @TypeConverters(Converters::class) var mashTemp: List<String>,  // ("60 Celsius-10", "65 Celsius-30", "72 Celsius-10")
+    var fermentation: String,  //  "21 Celsius"
+    var twist: String
+)
 
-}
+@Entity
+data class HopsClass(
+    @PrimaryKey(autoGenerate = true) var idHops: Long,
+    var idHopsBeer: Long,
+    var nameHops: String,
+    var amount: String,  // "10 Grams"
+    var add: String,
+    var attribute: String
+)
+
+@Entity
+data class MaltClass(
+    @PrimaryKey(autoGenerate = true) var idMalt: Long,
+    var idMaltBeer: Long,
+    var nameMalt: String,
+    var amount: String  // "1.63 Kilograms"
+)
