@@ -16,7 +16,7 @@ import java.lang.Exception
 class BeerViewModel(application: Application): AndroidViewModel(application) {
     private val repository: BeerRepository = BeerRepository(application)
     val allBeersAPI = MutableLiveData<String>()
-    val allBeers: LiveData<List<BeerClass>> = repository.observeAll()!!
+    val allBeers: LiveData<List<MediatorClass>> = repository.observeAll()!!
 
     init {
         getRetrofitBeers()
@@ -46,6 +46,9 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
     fun insert(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertBeer(beerObject)
     }
+    fun insert(beerObject: BeerClass, hopsList: List<HopsClass>, maltsList: List<MaltClass>) = viewModelScope.launch(Dispatchers.IO) {
+        repository.insertBeer(beerObject, hopsList, maltsList)
+    }
 
     fun updateBeer(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateBeer(beerObject)
@@ -59,7 +62,7 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
         repository.deleteBeer(beerObject)
     }
 
-    fun observeAllBeer(): LiveData<List<BeerClass>>? {
+    fun observeAllBeer(): LiveData<List<MediatorClass>>? {
         return allBeers
     }
 

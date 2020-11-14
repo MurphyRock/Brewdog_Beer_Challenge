@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.brewdog_beer_challenge_abax.datacenter.BeerClass
 import com.example.brewdog_beer_challenge_abax.datacenter.BeerViewModel
+import com.example.brewdog_beer_challenge_abax.datacenter.HopsClass
+import com.example.brewdog_beer_challenge_abax.datacenter.MaltClass
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,11 +33,13 @@ class MainActivity : AppCompatActivity() {
                 "testURL",
                 "name",
                 2.5,
-                "Description wow",
-                arrayListOf("a", "b", "c"),
-                arrayListOf("a", "b", "c"),
-                arrayListOf("a", "b", "c")
-                )
+                "Description wow"),
+                arrayListOf(
+                    HopsClass(0, 10,"hops1", 2, "yes", "black"),
+                    HopsClass(0, 11,"hops2", 3, "no", "blond")),
+                arrayListOf(
+                    MaltClass(0, 10,"hops1", 2),
+                    MaltClass(0, 11,"hops2", 3))
             )
         }
 
