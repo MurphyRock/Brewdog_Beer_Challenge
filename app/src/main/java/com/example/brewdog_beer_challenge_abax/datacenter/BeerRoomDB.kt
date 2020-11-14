@@ -16,7 +16,7 @@ import com.example.brewdog_beer_challenge_abax.tools.Converters
  - BeerRoomDB provides compile-time checks of SQLite statements.
 */
 
-@Database(entities = [BeerClass::class], version = 4, exportSchema = false)
+@Database(entities = [BeerClass::class, HopsClass::class, MaltClass::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class BeerRoomDB: RoomDatabase() {
 

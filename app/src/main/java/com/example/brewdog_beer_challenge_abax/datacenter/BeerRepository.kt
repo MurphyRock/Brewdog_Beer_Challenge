@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 class BeerRepository(application: Application) {
 
     private var beerDao: BeerDao? = null
-    private var allBeers: LiveData<List<BeerClass>>? = null
+    private var allBeers: LiveData<List<MediatorClass>>? = null
 
     init {
         val db: BeerRoomDB = BeerRoomDB.getDatabase(application!!)
@@ -19,6 +19,9 @@ class BeerRepository(application: Application) {
 
     suspend fun insertBeer(beerObject: BeerClass) {
         beerDao?.insertBeer(beerObject)
+    }
+    suspend fun insertBeer(beerObject: BeerClass, hopsList: List<HopsClass>, maltsList: List<MaltClass>) {
+        beerDao?.insertBeer(beerObject, hopsList, maltsList)
     }
 
     suspend fun updateBeer(beerObject: BeerClass){
@@ -33,7 +36,7 @@ class BeerRepository(application: Application) {
         beerDao?.deleteBeer(beerObject)
     }
 
-    fun observeAll(): LiveData<List<BeerClass>>? {
+    fun observeAll(): LiveData<List<MediatorClass>>? {
         return allBeers
     }
 
