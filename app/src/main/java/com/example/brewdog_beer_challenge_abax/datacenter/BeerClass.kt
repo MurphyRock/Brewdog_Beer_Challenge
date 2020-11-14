@@ -39,15 +39,6 @@ data class MethodClass(
     var twist: String?
 )
 
-// Subclass that contains Hops objects
-@Entity
-data class MaltClass(
-    @PrimaryKey(autoGenerate = true) var idMalt: Long,
-    var idMaltBeer: Long,
-    var nameMalt: String,
-    var amount: String  // "1.63 Kilograms"
-)
-
 @Entity
 data class HopsClass(
     @PrimaryKey(autoGenerate = true) var idHops: Long,
