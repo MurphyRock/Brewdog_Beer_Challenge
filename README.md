@@ -31,3 +31,6 @@ The data is being shown efficiently as the user can see quickly all the required
 The app is really easy to use. The user just need to open the app and after the quick showing of the SplashScreen, the basic beers information will be shown.
 In case some extra data is required, the user need to tap one of the beers. It will be opened a new screen called DetailsScreenFragment with some additional information.
 Keep in mind that some data like Hops & Malts of each beer are on reacyclers that can be scrolled horizontally.
+
+## Test
+Project tested and working successfully on Android 11, 10 & 7
