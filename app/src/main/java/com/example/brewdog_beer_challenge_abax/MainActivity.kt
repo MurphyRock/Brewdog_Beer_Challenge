@@ -1,14 +1,12 @@
 package com.example.brewdog_beer_challenge_abax
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.brewdog_beer_challenge_abax.datacenter.BeerViewModel
@@ -27,15 +25,16 @@ class MainActivity : AppCompatActivity() {
 
         beerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
+        // Back button on fragment
         var backButton: FloatingActionButton = findViewById<FloatingActionButton>(R.id.back_button)
         backButton.setOnClickListener {
             onBackPressed()
         }
 
+        // Recycler, Adapter, clickListener code...
         val recycler: RecyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         val adapter = BeerSimpleListAdapter(this, object : BeerSimpleListAdapter.ItemClickListener {
             override fun itemClick(beerObject: MediatorClass) {
-                Log.v("Item clicked!!", "Selected beer is " + beerObject.beer.name)
 
                 findViewById<LinearLayout>(R.id.mainContainer).visibility = View.GONE
                 findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
@@ -53,12 +52,9 @@ class MainActivity : AppCompatActivity() {
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
 
-//        val dividerItemDecoration = DividerItemDecoration(
-//            recycler.getContext(),
-//            (recycler.layoutManager as LinearLayoutManager).orientation
-//        )
-//        recycler.addItemDecoration(dividerItemDecoration)
-
+        // View model observer will update the adapter with any data change on real time
+        // In this case, the data is not suppose to change while is being shown except for one reason,
+        // the time that the data takes to come from the API
         beerViewModel.allBeers.observe(this, Observer { data ->
             data?.let {
                 adapter.setData(data)
@@ -66,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
+// Controlling the visibility of some views when coming back from the fragment
     override fun onBackPressed() {
         super.onBackPressed()
         if (findViewById<LinearLayout>(R.id.mainContainer).visibility == View.GONE){

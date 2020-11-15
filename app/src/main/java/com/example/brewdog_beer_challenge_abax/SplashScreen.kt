@@ -10,66 +10,54 @@ import com.example.brewdog_beer_challenge_abax.datacenter.BeerViewModel
 
 class SplashScreen : AppCompatActivity() {
 
-    lateinit var progressBar: ProgressBar
-    private val SPLASH_DELAY: Long = 1000 //3 seconds
-    private var mDelayHandler: Handler? = null
+    private lateinit var progressBar: ProgressBar
+    private val SPLASH_DELAY: Long = 1000
+    private var delayHandler: Handler? = null
     private var progressBarStatus = 0
-    var dummy:Int = 0
+    private var dummyOperation:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        // Initiating the ViewModel here so we can start retrieving the data from the API and save to the DB before MainActivity is executed
         var beerViewModel: BeerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
         progressBar = findViewById(R.id.progress_bar)
-
-        mDelayHandler = Handler()
+        delayHandler = Handler()
         //Navigate with delay
-        mDelayHandler!!.postDelayed(mRunnable, SPLASH_DELAY)
+        delayHandler!!.postDelayed(runnable, SPLASH_DELAY)
     }
 
     private fun launchMainActivity() {
         var intent = Intent(this, MainActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         this.finish()
-        mDelayHandler!!.removeCallbacks(mRunnable)
+        delayHandler!!.removeCallbacks(runnable)
 
     }
-    private val mRunnable: Runnable = Runnable {
-
+    private val runnable: Runnable = Runnable {
         Thread(Runnable {
             while (progressBarStatus < 100) {
                 // performing some dummy operation
                 try {
-                    dummy = dummy+25
+                    dummyOperation += 25
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-                // tracking progress
-                progressBarStatus = dummy
-
-                // Updating the progress bar
+                progressBarStatus = dummyOperation
                 progressBar.progress = progressBarStatus
             }
-
-            //splash_screen_progress_bar.setProgress(10)
-
             launchMainActivity()
-
-
         }).start()
     }
 
     override fun onDestroy() {
-
-        if (mDelayHandler != null) {
-            mDelayHandler!!.removeCallbacks(mRunnable)
-        }
-
         super.onDestroy()
+        if (delayHandler != null) {
+            delayHandler!!.removeCallbacks(runnable)
+        }
     }
 
 }

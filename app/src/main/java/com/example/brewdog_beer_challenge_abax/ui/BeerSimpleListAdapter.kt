@@ -20,7 +20,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.net.URL
 
-class BeerSimpleListAdapter(context: Context, var itemClickListener: ItemClickListener) : RecyclerView.Adapter<BeerSimpleListAdapter.ViewHolder>(){
+class BeerSimpleListAdapter(context: Context, private var itemClickListener: ItemClickListener) : RecyclerView.Adapter<BeerSimpleListAdapter.ViewHolder>(){
 
     private var beerList = emptyList<MediatorClass>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)

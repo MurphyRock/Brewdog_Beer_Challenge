@@ -8,8 +8,10 @@ import com.example.brewdog_beer_challenge_abax.datacenter.HopsClass
 import com.example.brewdog_beer_challenge_abax.datacenter.MaltClass
 import com.example.brewdog_beer_challenge_abax.datacenter.MethodClass
 
-class JsonDecoderMethods {
+//  JsonDecoderMethods class is being used to store some Json decoder methods.
+//  This is just for clean code purposes.
 
+class JsonDecoderMethods {
     companion object {
         fun getMalt(jsonMaltHopsList: JsonArray<*>): List<MaltClass> {
             var jsonMaltHopsObject: JsonObject

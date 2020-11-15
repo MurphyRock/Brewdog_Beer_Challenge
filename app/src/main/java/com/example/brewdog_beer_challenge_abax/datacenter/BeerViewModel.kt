@@ -11,20 +11,15 @@ import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import com.example.brewdog_beer_challenge_abax.networking.BeerAPI
 import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods
-//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getFermentation
-//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getHops
-//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getMalt
-//import com.example.brewdog_beer_challenge_abax.tools.JsonDecoderMethods.Companion.getMashTemp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.StringReader
 import java.lang.Exception
-import kotlin.math.log
 
-class BeerViewModel(application: Application): AndroidViewModel(application) {
+
+//The BeerViewModel is a class whose role is to provide data to the UI and survive configuration changes.
+// It acts as a communication center between the Repository and the UI.
+
+class BeerViewModel(application: Application): AndroidViewModel(application) { // Using AndroidViewModel instead of ViewModel because by using the second one, the context is susceptible to die while in background
     private val repository: BeerRepository = BeerRepository(application)
     val allBeers: LiveData<List<MediatorClass>> = repository.observeAll()!!
 
@@ -88,37 +83,6 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
 
             repository.insertBeer(beerObject, beerHopsList, beerMaltList)
         }
-    }
-
-    fun insert(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertBeer(beerObject)
-    }
-    suspend fun insert(beerObject: BeerClass, hopsList: List<HopsClass>, maltsList: List<MaltClass>) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insertBeer(beerObject, hopsList, maltsList)
-    }
-
-    fun updateBeer(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
-        repository.updateBeer(beerObject)
-    }
-
-    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteAll()
-    }
-
-    fun  deleteItem(beerObject: BeerClass) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteBeer(beerObject)
-    }
-
-    fun observeAllBeer(): LiveData<List<MediatorClass>>? {
-        return allBeers
-    }
-
-    fun getAllBeer(): List<BeerClass>? {
-        return repository.getAllBeers()
-    }
-
-    fun observeById(id: Int): LiveData<BeerClass>?{
-        return repository.observeById(id)
     }
 
     suspend fun getById(id: Long): BeerClass?{

@@ -15,14 +15,8 @@ interface BeerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMalt(maltObject: MaltClass?): Long
 
-    @Update
-    suspend fun updateBeer(beerObject: BeerClass?)
-
     @Query("DELETE FROM BeerClass")
     suspend fun deleteAll()
-
-    @Delete
-    fun deleteBeer(beerObject: BeerClass)
 
     @Transaction
     @Query("SELECT * from BeerClass ORDER BY idBeer ASC")

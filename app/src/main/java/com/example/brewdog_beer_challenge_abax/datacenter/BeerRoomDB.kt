@@ -38,10 +38,7 @@ abstract class BeerRoomDB: RoomDatabase() {
                     BeerRoomDB::class.java,
                     "beer_database"
                 ).fallbackToDestructiveMigration().build()
-                /*In this practical you don't update the entities and the version numbers.
-                However, if you modify the database schema, you need to update the version
-                number and define how to handle migrations.*/
-                // Just increment the version of the database on line 8 and run the app
+
                 INSTANCE = instance
                 return instance
             }
