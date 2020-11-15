@@ -48,7 +48,13 @@ class BeerRepository(application: Application) {
         return beerDao?.observeById(id)
     }
 
-    fun getById(id: Int): BeerClass?{
+    fun getById(id: Long): BeerClass?{
         return beerDao?.getById(id)
+    }
+    fun getHopsById(id: Long): List<HopsClass>?{
+        return beerDao?.getHopsById(id)
+    }
+    fun getMaltsById(id: Long): List<MaltClass>?{
+        return beerDao?.getMaltsById(id)
     }
 }

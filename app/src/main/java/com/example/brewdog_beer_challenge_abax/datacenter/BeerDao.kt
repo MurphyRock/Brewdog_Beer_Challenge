@@ -52,6 +52,10 @@ interface BeerDao {
     fun observeById(providedId: Int): LiveData<BeerClass>
 
     @Query("SELECT * from BeerClass WHERE idBeer = :providedId")
-    fun getById(providedId: Int): BeerClass?
+    fun getById(providedId: Long): BeerClass?
+    @Query("SELECT * from HopsClass WHERE idHopsBeer = :providedId")
+    fun getHopsById(providedId: Long): List<HopsClass>?
+    @Query("SELECT * from MaltClass WHERE idMaltBeer = :providedId")
+    fun getMaltsById(providedId: Long): List<MaltClass>?
 
 }

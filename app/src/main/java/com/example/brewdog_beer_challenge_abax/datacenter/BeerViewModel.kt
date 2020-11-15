@@ -55,26 +55,6 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
                     Log.v("Saving data failed", e.toString())
                 }
             }
-//            val beersList = BeerAPI.retrofitService.getBeers().enqueue(
-//                object : Callback<String> {
-//                    override fun onFailure(call: Call<String>, t: Throwable) {
-//                        allBeersAPI.value = "Failure retrieving Beers + ${t.message}"
-//                        // We use DB data
-//                    }
-//
-//                    override fun onResponse(call: Call<String>, response: Response<String>) {
-//                        allBeersAPI.value = "Success retrieving Beers: ${response.body()}"
-//                        if (response.body() != null && response.body() != "") {
-//                            val json = Klaxon().parseJsonArray(StringReader(response.body()!!))
-//                            Log.v("Kanto", json.toString())
-//
-//                            jsonToDB(json)
-//                        }
-//
-//                        // We replace all the DB data with the new one
-//                    }
-//
-//                })
         }
     }
 
@@ -141,7 +121,13 @@ class BeerViewModel(application: Application): AndroidViewModel(application) {
         return repository.observeById(id)
     }
 
-    fun getById(id: Int): BeerClass?{
+    suspend fun getById(id: Long): BeerClass?{
         return repository.getById(id)
+    }
+    suspend fun getHopsById(id: Long): List<HopsClass>?{
+        return repository.getHopsById(id)
+    }
+    suspend fun getMaltsById(id: Long): List<MaltClass>?{
+        return repository.getMaltsById(id)
     }
 }

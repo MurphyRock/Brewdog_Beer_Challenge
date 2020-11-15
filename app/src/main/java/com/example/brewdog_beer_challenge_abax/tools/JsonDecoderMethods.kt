@@ -59,9 +59,9 @@ class JsonDecoderMethods {
             for (x in 0 until beerMeshTempJsonList.size) {
                 jsonMeshTempJsonObject = beerMeshTempJsonList[x] as JsonObject
                 jsonTempJsonObject = jsonMeshTempJsonObject["temp"] as JsonObject
-                jsonMeshTempString = (jsonTempJsonObject["value"] as Int).toString() + " " +
-                        jsonTempJsonObject["unit"] as String + "-" +
-                        (jsonMeshTempJsonObject["duration"] as Int?).toString()
+                jsonMeshTempString = (jsonTempJsonObject["value"] as Number).toString() + " " +
+                        jsonTempJsonObject["unit"] as String +
+                        if((jsonMeshTempJsonObject["duration"] as Number?) == null) "" else "-" + (jsonMeshTempJsonObject["duration"] as Number?).toString()
 
                 mashTempList = mashTempList + jsonMeshTempString
             }

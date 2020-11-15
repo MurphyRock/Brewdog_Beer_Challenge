@@ -2,12 +2,19 @@ package com.example.brewdog_beer_challenge_abax
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.brewdog_beer_challenge_abax.datacenter.*
+import com.example.brewdog_beer_challenge_abax.ui.BeerSimpleListAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,53 +31,45 @@ class MainActivity : AppCompatActivity() {
 
         beerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
-        findViewById<Button>(R.id.testButton).setOnClickListener {
-            Snackbar.make(it, "Added test example", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-//            beerViewModel.insert(BeerClass(
-//                0,
-//                "testURL",
-//                "name",
-//                2.5,
-//                "Description wow",
-//                MethodClass(listOf("60 Celsius-10", "65 Celsius-30", "72 Celsius-10"), "21 Celsius", "Yuzu fruit")),
-//                arrayListOf(
-//                    HopsClass(0, 0,"hops1", "10 Grams", "yes", "black"),
-//                    HopsClass(0, 0,"hops2", "23 Grams", "no", "blond")),
-//                arrayListOf(
-//                    MaltClass(0, 0,"malts1", "5 Kilograms"),
-//                    MaltClass(0, 0,"malts2", "7 Kilograms"))
-//            )
-        }
+
+        val recycler: RecyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        val adapter = BeerSimpleListAdapter(this, object : BeerSimpleListAdapter.ItemClickListener {
+            override fun itemClick(beerObject: MediatorClass) {
+                Log.v("Item clicked!!", "Selected beer is " + beerObject.beer.name)
+
+                findViewById<LinearLayout>(R.id.mainContainer).visibility = View.GONE
+                findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
+
+                val fragmentManager = supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.addToBackStack("test")
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                val beerDetailsScreen: DetailsScreenFragment = DetailsScreenFragment.newInstance(beerObject.beer.idBeer)
+                transaction.replace(R.id.fragmentContainer, beerDetailsScreen, "tag").commit()
+
+            }
+        })
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(this)
+
 
         beerViewModel.allBeers.observe(this, Observer { data ->
             data?.let {
-                findViewById<TextView>(R.id.testText).text = data.toString()
+                adapter.setData(data)
             }
         })
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        GlobalScope.async(Dispatchers.IO) {
-//            beerViewModel.insert(BeerClass(
-//                0,
-//                "testURL",
-//                "name",
-//                2.5,
-//                "Description wow",
-//                arrayListOf("a", "b", "c"),
-//                arrayListOf("a", "b", "c"),
-//                arrayListOf("a", "b", "c")
-//                )
-//            )
-//
-//        }
-//    }
-//    override fun onStop() {
-//        super.onStop()
-//        GlobalScope.launch(Dispatchers.IO) {
-//            beerViewModel.deleteAll()
-//
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (findViewById<LinearLayout>(R.id.mainContainer).visibility == View.GONE){
+            findViewById<LinearLayout>(R.id.mainContainer).visibility = View.VISIBLE
+            findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.GONE
+        }
+    }
 }
