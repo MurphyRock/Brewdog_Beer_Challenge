@@ -16,7 +16,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="270dp"
-        android:src="@drawable/beer_icon"
+        android:src="@drawable/rszx_beer_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
