@@ -1,6 +1,8 @@
 package com.example.brewdog_beer_challenge_abax
 
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -13,15 +15,19 @@ import com.example.brewdog_beer_challenge_abax.datacenter.BeerViewModel
 import com.example.brewdog_beer_challenge_abax.datacenter.MediatorClass
 import com.example.brewdog_beer_challenge_abax.ui.BeerSimpleListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var beerViewModel: BeerViewModel
+    private var internet by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        internet = isNetwork()
 
         beerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
@@ -33,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         // Recycler, Adapter, clickListener code...
         val recycler: RecyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = BeerSimpleListAdapter(this, object : BeerSimpleListAdapter.ItemClickListener {
+        val adapter = BeerSimpleListAdapter(this, internet,  object : BeerSimpleListAdapter.ItemClickListener {
             override fun itemClick(beerObject: MediatorClass) {
 
                 findViewById<LinearLayout>(R.id.mainContainer).visibility = View.GONE
@@ -44,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 val transaction = fragmentManager.beginTransaction()
                 transaction.addToBackStack("test")
                 transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                val beerDetailsScreen: DetailsScreenFragment = DetailsScreenFragment.newInstance(beerObject.beer.idBeer)
+                val beerDetailsScreen: DetailsScreenFragment = DetailsScreenFragment.newInstance(beerObject.beer.idBeer, internet)
                 transaction.replace(R.id.fragmentContainer, beerDetailsScreen, "tag").commit()
 
             }
@@ -62,9 +68,23 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    fun isNetwork(): Boolean{
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        // In here we return true if network is not null and Network is connected
+        return networkInfo != null && networkInfo.isConnected
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        internet = isNetwork()
+    }
+
 // Controlling the visibility of some views when coming back from the fragment
     override fun onBackPressed() {
         super.onBackPressed()
+        internet = isNetwork()
         if (findViewById<LinearLayout>(R.id.mainContainer).visibility == View.GONE){
             findViewById<LinearLayout>(R.id.mainContainer).visibility = View.VISIBLE
             findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.GONE

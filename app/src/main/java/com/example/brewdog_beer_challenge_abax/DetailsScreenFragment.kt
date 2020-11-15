@@ -26,9 +26,11 @@ import kotlinx.coroutines.withContext
 
 
 private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
 class DetailsScreenFragment : Fragment() {
     private var param1: Long? = null
+    private var internet: Boolean? = null
     private lateinit var beerViewModel: BeerViewModel
     private lateinit var beer: BeerClass
     private lateinit var hops: List<HopsClass>
@@ -38,6 +40,7 @@ class DetailsScreenFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getLong(ARG_PARAM1)
+            internet = it.getBoolean(ARG_PARAM2)
         }
         beerViewModel = ViewModelProvider(this).get(BeerViewModel::class.java)
 
@@ -52,7 +55,10 @@ class DetailsScreenFragment : Fragment() {
                 hops =  beerViewModel.getHopsById(param1!!)!!
                 malts =  beerViewModel.getMaltsById(param1!!)!!
                 withContext(Dispatchers.Main){
-                    Picasso.get().load(beer.imageURL).into(view.findViewById<ImageView>(R.id.imageView))
+
+                    if (internet!!){
+                        Picasso.get().load(beer.imageURL).into(view.findViewById<ImageView>(R.id.imageView))
+                    }
                     view.findViewById<TextView>(R.id.name_text).text = beer.name
                     view.findViewById<TextView>(R.id.abv_text).text = "ABV: ${beer.abv} %"
                     view.findViewById<TextView>(R.id.description_text).text = beer.description
@@ -112,10 +118,11 @@ class DetailsScreenFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic fun newInstance(param1: Long) =
+        @JvmStatic fun newInstance(param1: Long, internet: Boolean) =
                 DetailsScreenFragment().apply {
                     arguments = Bundle().apply {
                         putLong(ARG_PARAM1, param1)
+                        putBoolean(ARG_PARAM2, internet)
                     }
                 }
     }

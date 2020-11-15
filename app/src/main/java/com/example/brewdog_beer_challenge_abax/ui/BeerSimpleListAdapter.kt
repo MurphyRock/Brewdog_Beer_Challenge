@@ -20,11 +20,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.net.URL
 
-class BeerSimpleListAdapter(context: Context, private var itemClickListener: ItemClickListener) : RecyclerView.Adapter<BeerSimpleListAdapter.ViewHolder>(){
+class BeerSimpleListAdapter(context: Context, private val internet: Boolean, private var itemClickListener: ItemClickListener) : RecyclerView.Adapter<BeerSimpleListAdapter.ViewHolder>(){
 
     private var beerList = emptyList<MediatorClass>()
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
@@ -42,7 +41,9 @@ class BeerSimpleListAdapter(context: Context, private var itemClickListener: Ite
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentBeer = beerList[position]
 
-        Picasso.get().load(currentBeer.beer.imageURL).into(holder.imageView)
+        if (internet){
+            Picasso.get().load(currentBeer.beer.imageURL).into(holder.imageView)
+        }
         holder.textName.text = currentBeer.beer.name
         holder.textAbv.text = "ABV: ${currentBeer.beer.abv} %"
 
