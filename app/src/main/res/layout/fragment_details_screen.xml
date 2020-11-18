@@ -7,7 +7,22 @@
     tools:context=".DetailsScreenFragment"
     android:layout_margin="12dp">
 
+    <ImageView
+        android:visibility="gone"
+        android:elevation="16dp"
+        android:id="@+id/imageViewZoom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:src="@drawable/rszx_beer_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <ScrollView
+        android:scrollbars="none"
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,184 +31,219 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:background="@drawable/round_background"
-                android:elevation="4dp"
-                android:id="@+id/imageView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/rszx_beer_icon"
-                tools:layout_editor_absoluteX="16dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp">
 
+                <ImageButton
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/transparent"
+                    android:src="@drawable/ic_baseline_zoom_out_map_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:background="@drawable/round_background"
+                    android:elevation="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:src="@drawable/rszx_beer_icon"
+                    tools:layout_editor_absoluteX="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
 
-                android:textColor="@color/progressBar2"
-                android:textStyle="bold"
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/name"
                 android:textAlignment="center"
-                android:textSize="24sp"/>
+                android:textColor="@color/progressBar2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/abv_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ABV"
+                android:layout_marginBottom="16dp"
+                android:text="@string/abv"
                 android:textAlignment="center"
-                android:textSize="16sp"
-                android:layout_marginBottom="16dp"/>
+                android:textSize="16sp" />
 
             <TextView
-                android:padding="8dp"
-                android:background="@drawable/round_background"
-                android:elevation="4dp"
                 android:id="@+id/description_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Description"
                 android:layout_marginBottom="16dp"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:textColor="@color/progressBar2"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:text="Ingredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:textColor="@color/progressBar2"
-                android:layout_marginLeft="8dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="Hops:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:padding="4dp"
                 android:background="@drawable/round_background"
                 android:elevation="4dp"
+                android:padding="8dp"
+                android:text="@string/description"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ingredients"
+                android:textAlignment="center"
+                android:textColor="@color/progressBar2"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/hops"
+                android:textColor="@color/progressBar2"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hops_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
-            <TextView
-                android:textColor="@color/progressBar2"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="Malts:"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:padding="4dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/round_background"
                 android:elevation="4dp"
+                android:padding="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/malts"
+                android:textColor="@color/progressBar2"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/malts_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/round_background"
+                android:elevation="4dp"
+                android:padding="4dp" />
 
 
             <TextView
-                android:textColor="@color/progressBar2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:text="@string/methods"
                 android:textAlignment="center"
-                android:text="Methods"
+                android:textColor="@color/progressBar2"
                 android:textSize="20sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"/>
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
+
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:orientation="horizontal">
+
                     <LinearLayout
-                        android:padding="8dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:background="@drawable/round_background"
                         android:elevation="4dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
                         <TextView
-                            android:layout_marginBottom="8dp"
-                            android:lines="2"
-                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:lines="2"
                             android:text="Mash Temp"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/methods_mashtemp_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mash Temp"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:padding="8dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
                         android:background="@drawable/round_background"
                         android:elevation="4dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
                         <TextView
-                            android:layout_marginBottom="8dp"
-                            android:lines="2"
-                            android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:lines="2"
                             android:text="Fermentation"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/methods_fermentation_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fermentation"
-                            android:textSize="12sp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:padding="8dp"
+                    android:id="@+id/twist_container"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
                     android:background="@drawable/round_background"
                     android:elevation="4dp"
-                    android:id="@+id/twist_container"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
                     <TextView
-                        android:lines="2"
-                        android:layout_marginBottom="8dp"
-                        android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:lines="2"
                         android:text="Twist"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/methods_twist_text"
                         android:layout_width="wrap_content"

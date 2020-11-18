@@ -56,8 +56,23 @@ class DetailsScreenFragment : Fragment() {
                 malts =  beerViewModel.getMaltsById(param1!!)!!
                 withContext(Dispatchers.Main){
 
+                    val image = view.findViewById<ImageView>(R.id.imageView)
+                    val imageZoom = view.findViewById<ImageView>(R.id.imageViewZoom)
                     if (internet!!){
-                        Picasso.get().load(beer.imageURL).into(view.findViewById<ImageView>(R.id.imageView))
+                        Picasso.get().load(beer.imageURL).into(image)
+                    }
+                    imageZoom.setOnClickListener {
+                        if (imageZoom.visibility == View.VISIBLE){
+                            imageZoom.visibility = View.GONE
+                        }
+                    }
+                    image.setOnClickListener {
+                        if (imageZoom.visibility == View.GONE){
+                            if (internet!!) {
+                                Picasso.get().load(beer.imageURL).into(imageZoom)
+                            }
+                            imageZoom.visibility = View.VISIBLE
+                        }
                     }
                     view.findViewById<TextView>(R.id.name_text).text = beer.name
                     view.findViewById<TextView>(R.id.abv_text).text = "ABV: ${beer.abv} %"

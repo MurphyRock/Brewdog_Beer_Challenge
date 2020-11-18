@@ -7,4 +7,6 @@
     <color name="progressBar">#a28806</color>
     <color name="progressBar2">#C65A4D0B</color>
     <color name="itemColor">#2DFFFFFF</color>
+
+    <color name="transparent">#00FFFFFF</color>
 </resources>
